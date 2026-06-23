@@ -1,259 +1,592 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Food Garden – Fine Dining</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-  :root {
-    --black: #0a0a0a; --deep: #0e0e0e; --card: rgba(18,14,10,0.82);
-    --gold: #C9A84C; --gold-lt: #E5C97E; --gold-dim: #7a6230;
-    --white: #f5f0e8; --muted: #aaa89f; --border: rgba(201,168,76,0.22);
-  }
-  html { scroll-behavior: smooth; }
-  body { background: var(--black); color: var(--white); font-family: 'Raleway', sans-serif; line-height: 1.7; overflow-x: hidden; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shopnow – Shoes & Footwear</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black:   #111111;
+      --charcoal:#2b2b2b;
+      --pink:    #e91e8c;
+      --pink-lt: #ff6ec7;
+      --cream:   #fff8f4;
+      --white:   #ffffff;
+      --gray:    #888888;
+      --border:  #ececec;
+      --shadow:  0 4px 24px rgba(0,0,0,0.08);
+      --radius:  14px;
+      --fs-hero: clamp(2.2rem, 7vw, 5rem);
+      --fs-h2:   clamp(1.4rem, 3.5vw, 2.4rem);
+      --fs-body: clamp(0.9rem, 1.5vw, 1rem);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; font-size: var(--fs-body); color: var(--black); background: var(--white); line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; width: 100%; height: 100%; object-fit: cover; }
 
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 1.2rem 6vw; background: rgba(8,6,4,0.92); backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--border);
-  }
-  .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--gold); letter-spacing: 0.08em; }
-  .nav-logo span { font-style: italic; color: var(--gold-lt); }
-  .nav-links { display: flex; gap: 2.2rem; list-style: none; }
-  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500; transition: color 0.3s; }
-  .nav-links a:hover { color: var(--gold); }
+    .skip { position: absolute; top: -999px; left: 1rem; background: var(--pink); color: #fff; padding: .5rem 1rem; border-radius: 4px; z-index: 9999; }
+    .skip:focus { top: 1rem; }
 
-  .hero {
-    min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-    text-align: center; padding: 8rem 6vw 4rem; position: relative; overflow: hidden;
-    background-image: url('https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=1600&auto=format&fit=crop&q=80');
-    background-size: cover; background-position: center; background-attachment: fixed;
-  }
-  .hero::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.70) 0%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0.85) 100%); }
-  .hero-content { position: relative; z-index: 2; }
-  .hero-eyebrow { font-size: 0.72rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.4rem; font-weight: 600; }
-  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(3.2rem, 9vw, 7.5rem); line-height: 1.05; color: var(--white); margin-bottom: 0.2em; }
-  .hero h1 em { font-style: italic; color: var(--gold); display: block; }
-  .hero-sub { font-size: 1rem; color: rgba(245,240,232,0.75); max-width: 420px; margin: 1.6rem auto 2.8rem; font-weight: 300; }
-  .btn-gold { display: inline-block; padding: 0.9rem 2.6rem; background: transparent; border: 1px solid var(--gold); color: var(--gold); font-family: 'Raleway', sans-serif; font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; font-weight: 600; cursor: pointer; transition: background 0.3s, color 0.3s; }
-  .btn-gold:hover { background: var(--gold); color: var(--black); }
+    /* TOP BAR */
+    .topbar { background: var(--black); color: var(--white); text-align: center; font-size: .8rem; padding: .45rem 1rem; }
+    .topbar span { color: var(--pink-lt); font-weight: 700; }
 
-  .divider { display: flex; align-items: center; gap: 1.2rem; padding: 0 6vw; margin: 0 auto; max-width: 900px; }
-  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-  .divider-icon { color: var(--gold); font-size: 1rem; letter-spacing: 0.3em; }
+    /* HEADER */
+    header { position: sticky; top: 0; z-index: 100; background: var(--white); border-bottom: 1px solid var(--border); }
+    .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 1.25rem; height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .logo { font-size: 1.6rem; font-weight: 900; letter-spacing: -1px; color: var(--black); }
+    .logo span { color: var(--pink); }
+    .nav-links { display: none; list-style: none; gap: 2rem; align-items: center; }
+    .nav-links a { font-size: .92rem; font-weight: 600; color: var(--charcoal); transition: color .2s; }
+    .nav-links a:hover { color: var(--pink); }
+    .nav-actions { display: flex; align-items: center; gap: .75rem; }
+    .icon-btn { background: none; border: none; cursor: pointer; font-size: 1.3rem; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: background .2s; position: relative; }
+    .icon-btn:hover { background: var(--cream); }
+    .cart-badge { position: absolute; top: 4px; right: 4px; background: var(--pink); color: #fff; font-size: .6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .menu-btn { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; gap: 5px; padding: 8px; min-width: 44px; min-height: 44px; justify-content: center; align-items: center; border-radius: 8px; }
+    .menu-btn span { display: block; width: 22px; height: 2px; background: var(--black); border-radius: 2px; }
 
-  /* MENU */
-  #menu {
-    padding: 6rem 6vw; position: relative;
-    background-image: url('https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=1600&auto=format&fit=crop&q=80');
-    background-size: cover; background-position: center; background-attachment: fixed;
-  }
-  #menu::before { content: ''; position: absolute; inset: 0; background: rgba(5,3,2,0.90); }
-  #menu > * { position: relative; z-index: 2; }
-  .menu-header { text-align: center; margin-bottom: 4rem; }
-  .section-label { font-size: 0.7rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 0.7rem; display: block; }
-  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3rem); color: var(--white); margin-bottom: 1rem; line-height: 1.15; }
-  .section-title em { font-style: italic; color: var(--gold); }
-  .section-desc { color: var(--muted); max-width: 500px; font-weight: 300; font-size: 0.95rem; margin: 0 auto; }
+    /* MOBILE NAV */
+    #mobile-nav { position: fixed; inset: 0 0 0 auto; width: min(300px, 85vw); background: var(--white); padding: 5rem 2rem 2rem; border: none; margin: 0; box-shadow: -4px 0 30px rgba(0,0,0,.12); transform: translateX(100%); transition: transform .3s ease, overlay .3s, display .3s allow-discrete; }
+    #mobile-nav:popover-open { transform: translateX(0); }
+    #mobile-nav::backdrop { background: rgba(0,0,0,.4); }
+    @starting-style { #mobile-nav:popover-open { transform: translateX(100%); } }
+    #mobile-nav ul { list-style: none; display: flex; flex-direction: column; }
+    #mobile-nav li { border-bottom: 1px solid var(--border); }
+    #mobile-nav a { display: block; padding: 1rem 0; font-size: 1.05rem; font-weight: 600; color: var(--black); }
+    #mobile-nav a:hover { color: var(--pink); }
 
-  .dishes { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 1.6rem; max-width: 1200px; margin: 0 auto; }
-  .dish-card { background: var(--card); border: 1px solid var(--border); padding: 0; position: relative; backdrop-filter: blur(8px); transition: border-color 0.35s, transform 0.35s; overflow: hidden; }
-  .dish-card:hover { border-color: var(--gold); transform: translateY(-5px); }
-  .dish-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity: 0; transition: opacity 0.35s; }
-  .dish-card:hover::after { opacity: 1; }
-  .dish-img { width: 100%; height: 200px; object-fit: cover; display: block; filter: brightness(0.88); transition: filter 0.35s; }
-  .dish-card:hover .dish-img { filter: brightness(1); }
-  .dish-body { padding: 1.6rem 1.8rem; }
-  .dish-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--white); margin-bottom: 0.4rem; }
-  .dish-desc { font-size: 0.83rem; color: var(--muted); font-weight: 300; margin-bottom: 1.2rem; line-height: 1.6; }
-  .dish-footer { display: flex; justify-content: space-between; align-items: center; }
-  .dish-price { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--gold); font-style: italic; }
-  .dish-tag { font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold-dim); border: 1px solid var(--gold-dim); padding: 0.2rem 0.55rem; font-weight: 600; }
+    /* HERO */
+    .hero { background: var(--cream); overflow: hidden; }
+    .hero-inner { max-width: 1200px; margin: 0 auto; padding: 3rem 1.25rem; display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: center; }
+    .hero-tag { display: inline-block; background: var(--pink); color: #fff; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; padding: .35rem 1rem; border-radius: 999px; margin-bottom: 1rem; }
+    .hero h1 { font-size: var(--fs-hero); font-weight: 900; line-height: 1.05; letter-spacing: -2px; margin-bottom: 1rem; }
+    .hero h1 em { font-style: italic; color: var(--pink); }
+    .hero p { color: var(--gray); font-size: clamp(.95rem, 1.8vw, 1.1rem); margin-bottom: 1.75rem; max-width: 480px; }
+    .hero-btns { display: flex; flex-wrap: wrap; gap: .75rem; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; padding: .8rem 1.75rem; border-radius: 999px; font-weight: 700; font-size: .95rem; cursor: pointer; transition: transform .15s, box-shadow .15s; min-height: 44px; border: none; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(233,30,140,.25); }
+    .btn-pink { background: var(--pink); color: #fff; }
+    .btn-outline { background: transparent; color: var(--black); border: 2px solid var(--black); }
 
-  /* ABOUT */
-  #about-wrap {
-    padding: 6rem 6vw; position: relative;
-    background-image: url('https://images.unsplash.com/photo-1596797038530-2c107229654b?w=1600&auto=format&fit=crop&q=80');
-    background-size: cover; background-position: center; background-attachment: fixed;
-  }
-  #about-wrap::before { content: ''; position: absolute; inset: 0; background: rgba(4,3,2,0.88); }
-  #about-wrap > * { position: relative; z-index: 2; }
-  #about { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; max-width: 1200px; margin: 0 auto; }
-  .about-visual { position: relative; height: 420px; border: 1px solid var(--border); overflow: hidden; background-image: url('https://images.unsplash.com/photo-1631452180539-96aca7d48617?w=800&auto=format&fit=crop&q=80'); background-size: cover; background-position: center; }
-  .about-badge { position: absolute; bottom: 2rem; right: 2rem; border: 1px solid var(--gold); padding: 1.2rem 1.6rem; text-align: center; background: rgba(10,8,4,0.9); backdrop-filter: blur(6px); }
-  .about-badge-num { font-family: 'Playfair Display', serif; font-size: 2.4rem; color: var(--gold); display: block; line-height: 1; }
-  .about-badge-lbl { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-top: 0.3rem; }
-  .about-list { margin-top: 2rem; list-style: none; }
-  .about-list li { padding: 0.7rem 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; color: var(--muted); display: flex; align-items: center; gap: 0.8rem; }
-  .about-list li span { color: var(--gold); }
+    /* HERO VISUAL - 3 shoe images */
+    .hero-visual { display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem; }
+    .hero-card { border-radius: var(--radius); overflow: hidden; position: relative; }
+    .hero-card:first-child { grid-row: span 2; min-height: 300px; }
+    .hc2, .hc3 { aspect-ratio: 4/3; }
+    .hero-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-card-label { position: absolute; bottom: 1rem; left: 1rem; background: rgba(0,0,0,.5); color: #fff; padding: .3rem .8rem; border-radius: 999px; font-size: .78rem; font-weight: 700; backdrop-filter: blur(4px); }
 
-  /* RESERVE */
-  #reserve {
-    padding: 6rem 6vw; text-align: center; position: relative;
-    background-image: url('https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?w=1600&auto=format&fit=crop&q=80');
-    background-size: cover; background-position: center; background-attachment: fixed;
-  }
-  #reserve::before { content: ''; position: absolute; inset: 0; background: rgba(4,3,1,0.88); }
-  #reserve > * { position: relative; z-index: 2; }
-  .reserve-form { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; max-width: 680px; margin: 2rem auto 0; }
-  .reserve-form input, .reserve-form select { background: rgba(20,15,8,0.85); border: 1px solid var(--border); color: var(--white); padding: 0.9rem 1.2rem; font-family: 'Raleway', sans-serif; font-size: 0.85rem; flex: 1 1 180px; outline: none; transition: border-color 0.3s; }
-  .reserve-form input:focus, .reserve-form select:focus { border-color: var(--gold); }
-  .reserve-form select option { background: #110d08; }
-  .reserve-form .btn-gold { flex: 1 1 100%; margin-top: 0.5rem; padding: 1rem; font-size: 0.82rem; }
+    /* CATEGORIES */
+    .categories { padding: 3rem 1.25rem; max-width: 1200px; margin: 0 auto; }
+    .sec-head { margin-bottom: 1.75rem; }
+    .sec-label { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--pink); }
+    .sec-title { font-size: var(--fs-h2); font-weight: 800; margin-top: .25rem; letter-spacing: -1px; }
+    .cat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .cat-card { border-radius: var(--radius); overflow: hidden; position: relative; min-height: 150px; cursor: pointer; transition: transform .2s; }
+    .cat-card:hover { transform: translateY(-4px); }
+    .cat-card img { width: 100%; height: 100%; object-fit: cover; }
+    .cat-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.72) 0%, rgba(0,0,0,.05) 60%); display: flex; flex-direction: column; justify-content: flex-end; padding: 1rem; }
+    .cat-overlay h3 { color: #fff; font-size: 1rem; font-weight: 800; }
+    .cat-overlay p { color: rgba(255,255,255,.8); font-size: .78rem; }
 
-  footer { border-top: 1px solid var(--border); padding: 3rem 6vw; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1.5rem; background: #060402; }
-  .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--gold); font-style: italic; }
-  .footer-info { font-size: 0.8rem; color: var(--muted); }
-  .footer-copy { font-size: 0.72rem; color: var(--gold-dim); }
+    /* PRODUCTS */
+    .products-section { background: var(--cream); padding: 3rem 1.25rem; }
+    .products-inner { max-width: 1200px; margin: 0 auto; }
+    .filter-bar { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.75rem; }
+    .filter-btn { padding: .45rem 1.1rem; border-radius: 999px; border: 2px solid var(--border); background: var(--white); font-size: .82rem; font-weight: 600; cursor: pointer; min-height: 44px; transition: all .2s; }
+    .filter-btn.active, .filter-btn:hover { background: var(--pink); color: #fff; border-color: var(--pink); }
+    .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .product-card { background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: transform .2s; }
+    .product-card:hover { transform: translateY(-5px); }
+    .product-thumb { aspect-ratio: 1/1; position: relative; overflow: hidden; background: #f5f5f5; }
+    .product-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+    .product-card:hover .product-thumb img { transform: scale(1.06); }
+    .badge { position: absolute; top: .75rem; left: .75rem; background: var(--pink); color: #fff; font-size: .68rem; font-weight: 700; padding: .2rem .6rem; border-radius: 999px; z-index: 1; }
+    .badge-new { background: var(--black); }
+    .wishlist-btn { position: absolute; top: .75rem; right: .75rem; background: var(--white); border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,.1); transition: transform .2s; z-index: 1; }
+    .wishlist-btn:hover { transform: scale(1.15); }
+    .product-info { padding: .9rem; }
+    .product-brand { font-size: .72rem; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; }
+    .product-name { font-size: .95rem; font-weight: 700; margin: .2rem 0 .4rem; }
+    .product-price { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+    .price-now { font-size: 1rem; font-weight: 800; color: var(--pink); }
+    .price-old { font-size: .8rem; color: var(--gray); text-decoration: line-through; }
+    .price-off { font-size: .72rem; font-weight: 700; color: #2d6a4f; }
+    .add-cart { width: 100%; margin-top: .75rem; padding: .6rem; background: var(--black); color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: .85rem; cursor: pointer; min-height: 44px; transition: background .2s; }
+    .add-cart:hover { background: var(--pink); }
 
-  @media (max-width: 768px) {
-    #about { grid-template-columns: 1fr; gap: 3rem; }
-    .about-visual { height: 260px; }
-    .hero, #menu, #about-wrap, #reserve { background-attachment: scroll; }
-  }
-  @media (max-width: 520px) { .nav-links { display: none; } }
-</style>
+    /* OFFER BANNER */
+    .offer-banner { background: var(--black); color: var(--white); padding: 3rem 1.25rem; text-align: center; }
+    .offer-banner h2 { font-size: var(--fs-h2); font-weight: 900; letter-spacing: -1px; margin-bottom: .5rem; }
+    .offer-banner h2 span { color: var(--pink); }
+    .offer-banner p { color: rgba(255,255,255,.65); margin-bottom: 1.5rem; }
+    .countdown { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; }
+    .count-box { background: rgba(255,255,255,.1); border-radius: 10px; padding: .75rem 1.25rem; min-width: 64px; }
+    .count-num { font-size: 1.8rem; font-weight: 900; display: block; }
+    .count-lbl { font-size: .7rem; color: rgba(255,255,255,.6); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* FEATURES */
+    .features-strip { padding: 2.5rem 1.25rem; max-width: 1200px; margin: 0 auto; }
+    .features-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+    .feat-item { display: flex; align-items: flex-start; gap: .85rem; padding: 1.25rem; border-radius: var(--radius); border: 1px solid var(--border); }
+    .feat-icon { font-size: 1.8rem; flex-shrink: 0; }
+    .feat-item h4 { font-size: .9rem; font-weight: 700; margin-bottom: .2rem; }
+    .feat-item p { font-size: .8rem; color: var(--gray); }
+
+    /* REVIEWS */
+    .reviews-section { background: var(--cream); padding: 3rem 1.25rem; }
+    .reviews-inner { max-width: 1200px; margin: 0 auto; }
+    .reviews-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 1.75rem; }
+    .review-card { background: var(--white); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); }
+    .stars { color: #f59e0b; font-size: 1rem; margin-bottom: .75rem; }
+    .review-card p { font-size: .9rem; color: var(--charcoal); line-height: 1.7; margin-bottom: 1rem; }
+    .reviewer { display: flex; align-items: center; gap: .75rem; }
+    .rev-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--pink); color: #fff; font-weight: 700; font-size: .85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .rev-name { font-weight: 700; font-size: .88rem; }
+    .rev-loc { font-size: .75rem; color: var(--gray); }
+
+    /* NEWSLETTER */
+    .newsletter { background: linear-gradient(135deg, var(--pink) 0%, #c2185b 100%); color: #fff; padding: 3rem 1.25rem; text-align: center; }
+    .newsletter h2 { font-size: var(--fs-h2); font-weight: 900; letter-spacing: -1px; margin-bottom: .5rem; }
+    .newsletter p { opacity: .88; margin-bottom: 1.5rem; }
+    .nl-form { display: flex; flex-direction: column; gap: .75rem; max-width: 480px; margin: 0 auto; }
+    .nl-form input { padding: .85rem 1.25rem; border-radius: 999px; border: none; font-size: .95rem; min-height: 44px; width: 100%; }
+    .btn-white { background: #fff; color: var(--pink); font-weight: 800; }
+
+    /* FOOTER */
+    footer { background: var(--black); color: rgba(255,255,255,.7); padding: 3rem 1.25rem 1.5rem; }
+    .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 2rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,.1); }
+    .footer-brand p { font-size: .88rem; margin-top: .75rem; line-height: 1.7; }
+    .footer-col h4 { color: #fff; font-size: .9rem; font-weight: 700; margin-bottom: 1rem; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
+    .footer-col a { font-size: .88rem; color: rgba(255,255,255,.6); transition: color .2s; }
+    .footer-col a:hover { color: var(--pink-lt); }
+    .social-row { display: flex; gap: .75rem; margin-top: 1rem; }
+    .social-btn { width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,.1); display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; transition: background .2s; }
+    .social-btn:hover { background: var(--pink); }
+    .footer-bottom { max-width: 1200px; margin: 1.5rem auto 0; font-size: .8rem; display: flex; flex-direction: column; gap: .5rem; align-items: center; text-align: center; }
+    .payment-icons { display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center; }
+    .pay-icon { background: rgba(255,255,255,.1); padding: .25rem .6rem; border-radius: 4px; font-size: .75rem; font-weight: 700; color: #fff; }
+
+    /* MEDIA QUERIES */
+    @media (min-width: 600px) {
+      .hero-inner    { grid-template-columns: 1fr 1fr; padding: 4rem 1.25rem; }
+      .cat-grid      { grid-template-columns: repeat(4, 1fr); }
+      .products-grid { grid-template-columns: repeat(3, 1fr); }
+      .reviews-grid  { grid-template-columns: repeat(2, 1fr); }
+      .nl-form       { flex-direction: row; }
+      .footer-grid   { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 900px) {
+      .nav-links     { display: flex; }
+      .menu-btn      { display: none; }
+      .products-grid { grid-template-columns: repeat(4, 1fr); }
+      .features-row  { grid-template-columns: repeat(4, 1fr); }
+      .reviews-grid  { grid-template-columns: repeat(3, 1fr); }
+      .footer-grid   { grid-template-columns: 2fr 1fr 1fr 1fr; }
+      .footer-bottom { flex-direction: row; justify-content: space-between; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
 </head>
 <body>
 
-<nav>
-  <div class="nav-logo">Food <span>Garden</span></div>
-  <ul class="nav-links">
-    <li><a href="#menu">Menu</a></li>
-    <li><a href="#about-wrap">About</a></li>
-    <li><a href="#reserve">Reserve</a></li>
+<a href="#main" class="skip">Skip to main content</a>
+
+<!-- TOP BAR -->
+<div class="topbar">👟 FREE Delivery on orders above ₹599 — Use code <span>SHOPNOW10</span> for 10% off!</div>
+
+<!-- HEADER -->
+<header>
+  <div class="nav-inner">
+    <a href="#" class="logo">Shop<span>now</span></a>
+    <nav aria-label="Main navigation">
+      <ul class="nav-links">
+        <li><a href="#categories">Categories</a></li>
+        <li><a href="#products">New Arrivals</a></li>
+        <li><a href="#offers">Offers</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn" aria-label="Search">🔍</button>
+      <button class="icon-btn" aria-label="Wishlist">🤍</button>
+      <button class="icon-btn" aria-label="Cart">🛒<span class="cart-badge">3</span></button>
+      <button class="menu-btn" popovertarget="mobile-nav" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- MOBILE NAV -->
+<div id="mobile-nav" popover>
+  <ul>
+    <li><a href="#categories" popovertarget="mobile-nav" popovertargetaction="hide">Categories</a></li>
+    <li><a href="#products"   popovertarget="mobile-nav" popovertargetaction="hide">New Arrivals</a></li>
+    <li><a href="#offers"     popovertarget="mobile-nav" popovertargetaction="hide">Offers</a></li>
+    <li><a href="#reviews"    popovertarget="mobile-nav" popovertargetaction="hide">Reviews</a></li>
+    <li><a href="#newsletter" popovertarget="mobile-nav" popovertargetaction="hide">Newsletter</a></li>
   </ul>
-</nav>
+</div>
 
-<!-- HERO — Indian food spread background -->
-<section class="hero">
-  <div class="hero-content">
-    <p class="hero-eyebrow">Est. 2018 · Authentic Indian Cuisine</p>
-    <h1>Taste the <br><em>Soul of India</em></h1>
-    <p class="hero-sub">Traditional recipes, royal spices, and home-style warmth — all served under one roof at Food Garden.</p>
-    <a href="#menu" class="btn-gold">Explore Menu</a>
-  </div>
-</section>
+<main id="main">
 
-<div class="divider"><span class="divider-icon">✦ ✦ ✦</span></div>
-
-<!-- MENU -->
-<section id="menu">
-  <div class="menu-header">
-    <span class="section-label">Our Signature Indian Dishes</span>
-    <h2 class="section-title">Flavours of <em>Tradition</em></h2>
-    <p class="section-desc">From the streets of Delhi to the coasts of Kerala — every dish crafted with authentic spices and love.</p>
-  </div>
-  <div class="dishes">
-
-    <!-- Dish 1: Butter Chicken -->
-    <div class="dish-card">
-      <img class="dish-img" src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=600&auto=format&fit=crop&q=80" alt="Butter Chicken" />
-      <div class="dish-body">
-        <h3 class="dish-name">Murgh Makhani</h3>
-        <p class="dish-desc">Tender tandoor-grilled chicken simmered in a rich tomato-butter gravy, fragrant with kasuri methi and cream.</p>
-        <div class="dish-footer">
-          <span class="dish-price">₹ 380</span>
-          <span class="dish-tag">Bestseller</span>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <span class="hero-tag">New Collection 2026</span>
+        <h1>Walk in<br><em>Style</em></h1>
+        <p>Step into the latest footwear trends — sneakers, boots, sandals & more. Fast delivery across India.</p>
+        <div class="hero-btns">
+          <a href="#products" class="btn btn-pink">Shop Now →</a>
+          <a href="#categories" class="btn btn-outline">Browse Categories</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-card">
+          <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80" alt="Featured Sneakers" />
+          <span class="hero-card-label">Trending Sneakers</span>
+        </div>
+        <div class="hero-card hc2">
+          <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&q=80" alt="Running Shoes" />
+          <span class="hero-card-label">Running Shoes</span>
+        </div>
+        <div class="hero-card hc3">
+          <img src="https://images.unsplash.com/photo-1512374382149-233c42b6a83b?w=400&q=80" alt="Boots" />
+          <span class="hero-card-label">Boots & Casuals</span>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- Dish 2: Biryani -->
-    <div class="dish-card">
-      <img class="dish-img" src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600&auto=format&fit=crop&q=80" alt="Biryani" />
-      <div class="dish-body">
-        <h3 class="dish-name">Hyderabadi Dum Biryani</h3>
-        <p class="dish-desc">Slow-cooked basmati rice layered with spiced mutton, saffron milk, fried onions and mint — sealed in dum.</p>
-        <div class="dish-footer">
-          <span class="dish-price">₹ 420</span>
-          <span class="dish-tag">Chef's Pick</span>
+  <!-- CATEGORIES -->
+  <section class="categories" id="categories">
+    <div class="sec-head">
+      <p class="sec-label">Shop by</p>
+      <h2 class="sec-title">Categories</h2>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card">
+        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80" alt="Sneakers" />
+        <div class="cat-overlay"><h3>Sneakers</h3><p>120+ styles</p></div>
+      </div>
+      <div class="cat-card">
+        <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&q=80" alt="Running" />
+        <div class="cat-overlay"><h3>Running</h3><p>80+ styles</p></div>
+      </div>
+      <div class="cat-card">
+        <img src="https://images.unsplash.com/photo-1512374382149-233c42b6a83b?w=400&q=80" alt="Boots" />
+        <div class="cat-overlay"><h3>Boots</h3><p>60+ styles</p></div>
+      </div>
+      <div class="cat-card">
+        <img src="https://images.unsplash.com/photo-1603487742131-4160ec999306?w=400&q=80" alt="Sandals" />
+        <div class="cat-overlay"><h3>Sandals</h3><p>90+ styles</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="products-section" id="products">
+    <div class="products-inner">
+      <div class="sec-head">
+        <p class="sec-label">Trending</p>
+        <h2 class="sec-title">New Arrivals</h2>
+      </div>
+      <div class="filter-bar">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">Sneakers</button>
+        <button class="filter-btn">Running</button>
+        <button class="filter-btn">Boots</button>
+        <button class="filter-btn">Sandals</button>
+        <button class="filter-btn">Sale</button>
+      </div>
+      <div class="products-grid">
+
+        <div class="product-card">
+          <div class="product-thumb">
+            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80" alt="Nike Air Max" />
+            <span class="badge">HOT</span>
+            <button class="wishlist-btn" aria-label="Wishlist">🤍</button>
+          </div>
+          <div class="product-info">
+            <p class="product-brand">Nike</p>
+            <p class="product-name">Air Max 270</p>
+            <div class="product-price">
+              <span class="price-now">₹7,999</span>
+              <span class="price-old">₹12,999</span>
+              <span class="price-off">38% off</span>
+            </div>
+            <button class="add-cart">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-thumb">
+            <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&q=80" alt="Adidas Running" />
+            <span class="badge badge-new">NEW</span>
+            <button class="wishlist-btn" aria-label="Wishlist">🤍</button>
+          </div>
+          <div class="product-info">
+            <p class="product-brand">Adidas</p>
+            <p class="product-name">Ultraboost 22</p>
+            <div class="product-price">
+              <span class="price-now">₹8,499</span>
+              <span class="price-old">₹13,999</span>
+              <span class="price-off">39% off</span>
+            </div>
+            <button class="add-cart">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-thumb">
+            <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=400&q=80" alt="Puma Sneakers" />
+            <span class="badge">SALE</span>
+            <button class="wishlist-btn" aria-label="Wishlist">🤍</button>
+          </div>
+          <div class="product-info">
+            <p class="product-brand">Puma</p>
+            <p class="product-name">RS-X Sneakers</p>
+            <div class="product-price">
+              <span class="price-now">₹4,999</span>
+              <span class="price-old">₹7,999</span>
+              <span class="price-off">37% off</span>
+            </div>
+            <button class="add-cart">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-thumb">
+            <img src="https://images.unsplash.com/photo-1512374382149-233c42b6a83b?w=400&q=80" alt="Boots" />
+            <span class="badge badge-new">NEW</span>
+            <button class="wishlist-btn" aria-label="Wishlist">🤍</button>
+          </div>
+          <div class="product-info">
+            <p class="product-brand">Woodland</p>
+            <p class="product-name">Leather Boots</p>
+            <div class="product-price">
+              <span class="price-now">₹3,499</span>
+              <span class="price-old">₹5,999</span>
+              <span class="price-off">41% off</span>
+            </div>
+            <button class="add-cart">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-thumb">
+            <img src="https://images.unsplash.com/photo-1603487742131-4160ec999306?w=400&q=80" alt="Sandals" />
+            <button class="wishlist-btn" aria-label="Wishlist">🤍</button>
+          </div>
+          <div class="product-info">
+            <p class="product-brand">Bata</p>
+            <p class="product-name">Comfort Sandals</p>
+            <div class="product-price">
+              <span class="price-now">₹1,299</span>
+              <span class="price-old">₹1,999</span>
+              <span class="price-off">35% off</span>
+            </div>
+            <button class="add-cart">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-thumb">
+            <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&q=80" alt="Casual Shoes" />
+            <span class="badge">SALE</span>
+            <button class="wishlist-btn" aria-label="Wishlist">🤍</button>
+          </div>
+          <div class="product-info">
+            <p class="product-brand">Skechers</p>
+            <p class="product-name">Go Walk Casual</p>
+            <div class="product-price">
+              <span class="price-now">₹2,999</span>
+              <span class="price-old">₹4,999</span>
+              <span class="price-off">40% off</span>
+            </div>
+            <button class="add-cart">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-thumb">
+            <img src="https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=400&q=80" alt="Canvas Shoes" />
+            <span class="badge badge-new">NEW</span>
+            <button class="wishlist-btn" aria-label="Wishlist">🤍</button>
+          </div>
+          <div class="product-info">
+            <p class="product-brand">Converse</p>
+            <p class="product-name">Chuck Taylor All Star</p>
+            <div class="product-price">
+              <span class="price-now">₹3,799</span>
+              <span class="price-old">₹5,499</span>
+              <span class="price-off">30% off</span>
+            </div>
+            <button class="add-cart">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-thumb">
+            <img src="https://images.unsplash.com/photo-1575537302964-96cd47c06b1b?w=400&q=80" alt="Formal Shoes" />
+            <button class="wishlist-btn" aria-label="Wishlist">🤍</button>
+          </div>
+          <div class="product-info">
+            <p class="product-brand">Red Tape</p>
+            <p class="product-name">Formal Derby Shoes</p>
+            <div class="product-price">
+              <span class="price-now">₹2,499</span>
+              <span class="price-old">₹3,999</span>
+              <span class="price-off">37% off</span>
+            </div>
+            <button class="add-cart">Add to Cart</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- OFFER BANNER -->
+  <section class="offer-banner" id="offers">
+    <h2>Flash Sale Ends in <span>⚡</span></h2>
+    <p>Up to 70% off on selected footwear. Don't miss out!</p>
+    <div class="countdown">
+      <div class="count-box"><span class="count-num" id="hrs">08</span><span class="count-lbl">Hours</span></div>
+      <div class="count-box"><span class="count-num" id="mins">45</span><span class="count-lbl">Mins</span></div>
+      <div class="count-box"><span class="count-num" id="secs">30</span><span class="count-lbl">Secs</span></div>
+    </div>
+    <a href="#products" class="btn btn-pink">Grab the Deal →</a>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features-strip">
+    <div class="features-row">
+      <div class="feat-item"><span class="feat-icon">🚚</span><div><h4>Free Delivery</h4><p>On orders above ₹599 across India</p></div></div>
+      <div class="feat-item"><span class="feat-icon">🔄</span><div><h4>Easy Returns</h4><p>30-day hassle-free return policy</p></div></div>
+      <div class="feat-item"><span class="feat-icon">🔒</span><div><h4>Secure Payment</h4><p>UPI, cards & wallets accepted</p></div></div>
+      <div class="feat-item"><span class="feat-icon">📏</span><div><h4>Size Guide</h4><p>Find your perfect fit easily</p></div></div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="reviews-section" id="reviews">
+    <div class="reviews-inner">
+      <div class="sec-head">
+        <p class="sec-label">Happy Customers</p>
+        <h2 class="sec-title">What They Say</h2>
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <p>"Nike Air Max is absolutely worth it! Super comfortable and looks great. Delivered in 2 days to Madurai!"</p>
+          <div class="reviewer"><div class="rev-avatar">RK</div><div><div class="rev-name">Rahul K.</div><div class="rev-loc">Madurai, TN</div></div></div>
+        </div>
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <p>"Adidas Ultraboost is perfect for my morning runs. Great grip, very lightweight. Highly recommend Shopnow!"</p>
+          <div class="reviewer"><div class="rev-avatar">PS</div><div><div class="rev-name">Priya S.</div><div class="rev-loc">Chennai, TN</div></div></div>
+        </div>
+        <div class="review-card">
+          <div class="stars">★★★★☆</div>
+          <p>"Woodland boots are sturdy and look premium. Used SHOPNOW10 code and got a great discount. Very happy!"</p>
+          <div class="reviewer"><div class="rev-avatar">AM</div><div><div class="rev-name">Arjun M.</div><div class="rev-loc">Coimbatore, TN</div></div></div>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- Dish 3: Paneer Tikka -->
-    <div class="dish-card">
-      <img class="dish-img" src="https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=600&auto=format&fit=crop&q=80" alt="Paneer Tikka" />
-      <div class="dish-body">
-        <h3 class="dish-name">Paneer Tikka Masala</h3>
-        <p class="dish-desc">Chargrilled cottage cheese cubes in a smoky onion-tomato gravy with bell peppers and aromatic garam masala.</p>
-        <div class="dish-footer">
-          <span class="dish-price">₹ 320</span>
-          <span class="dish-tag">Veg</span>
-        </div>
+  <!-- NEWSLETTER -->
+  <section class="newsletter" id="newsletter">
+    <h2>Get 10% Off Your First Order</h2>
+    <p>Subscribe for exclusive deals, new arrivals & shoe style tips.</p>
+    <div class="nl-form">
+      <input type="email" placeholder="Enter your email address" aria-label="Email address" />
+      <button class="btn btn-white">Subscribe</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col footer-brand">
+      <span class="logo">Shop<span style="color:var(--pink)">now</span></span>
+      <p>Your one-stop footwear destination. Trending shoes delivered fast across India.</p>
+      <div class="social-row">
+        <div class="social-btn">📸</div>
+        <div class="social-btn">👍</div>
+        <div class="social-btn">▶️</div>
+        <div class="social-btn">💬</div>
       </div>
     </div>
-
-    <!-- Dish 4: Dal Makhani -->
-    <div class="dish-card">
-      <img class="dish-img" src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600&auto=format&fit=crop&q=80" alt="Dal Makhani" />
-      <div class="dish-body">
-        <h3 class="dish-name">Dal Makhani</h3>
-        <p class="dish-desc">Black lentils slow-cooked overnight with butter, cream and spices — served with tandoor-fresh butter naan.</p>
-        <div class="dish-footer">
-          <span class="dish-price">₹ 260</span>
-          <span class="dish-tag">Veg · New</span>
-        </div>
-      </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="#">Sneakers</a></li>
+        <li><a href="#">Running Shoes</a></li>
+        <li><a href="#">Boots</a></li>
+        <li><a href="#">Sandals</a></li>
+        <li><a href="#">Formal Shoes</a></li>
+      </ul>
     </div>
-
-
-  </div>
-</section>
-
-<!-- ABOUT -->
-<div id="about-wrap">
-  <div id="about">
-    <div class="about-visual">
-      <div class="about-badge">
-        <span class="about-badge-num">12+</span>
-        <span class="about-badge-lbl">Years of Excellence</span>
-      </div>
+    <div class="footer-col">
+      <h4>Help</h4>
+      <ul>
+        <li><a href="#">Track Order</a></li>
+        <li><a href="#">Returns & Refunds</a></li>
+        <li><a href="#">Size Guide</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
     </div>
-    <div class="about-text">
-      <span class="section-label">Our Story</span>
-      <h2 class="section-title">A <em>Royal</em> Indian Table</h2>
-      <p class="section-desc">Food Garden was founded on the belief that every Indian meal is a celebration. From our tandoor to your table, we cook with generations of tradition.</p>
-      <ul class="about-list">
-        <li><span>✦</span> Authentic spices imported from origin</li>
-        <li><span>✦</span> Award-winning Chef Arjun Menon</li>
-        <li><span>✦</span> Private dining & event catering</li>
-        <li><span>✦</span> Open daily — Noon to Midnight</li>
+    <div class="footer-col">
+      <h4>About</h4>
+      <ul>
+        <li><a href="#">About Shopnow</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
       </ul>
     </div>
   </div>
-</div>
-
-<!-- RESERVE -->
-<section id="reserve">
-  <span class="section-label">Book a Table</span>
-  <h2 class="section-title">Reserve Your <em>Evening</em></h2>
-  <p class="section-desc" style="margin:0 auto 0;">Secure your spot and let us take care of the rest.</p>
-  <div class="reserve-form">
-    <input type="text" placeholder="Your Name" />
-    <input type="tel" placeholder="Phone Number" />
-    <input type="date" />
-    <select>
-      <option value="">Guests</option>
-      <option>1 Person</option>
-      <option>2 People</option>
-      <option>3–4 People</option>
-      <option>5+ People</option>
-    </select>
-    <button class="btn-gold">Confirm Reservation</button>
+  <div class="footer-bottom">
+    <span>© 2026 Shopnow. All rights reserved.</span>
+    <div class="payment-icons">
+      <span class="pay-icon">UPI</span>
+      <span class="pay-icon">VISA</span>
+      <span class="pay-icon">MC</span>
+      <span class="pay-icon">PayTM</span>
+      <span class="pay-icon">COD</span>
+    </div>
   </div>
-</section>
-
-<footer>
-  <div class="footer-logo">Food Garden</div>
-  <div class="footer-info">📍 12, Garden Lane, Anna Nagar, Chennai &nbsp;|&nbsp; 📞 +91 98400 00000</div>
-  <div class="footer-copy">© 2026 Food Garden. All rights reserved.</div>
 </footer>
+
+<script>
+  let total = 8 * 3600 + 45 * 60 + 30;
+  setInterval(() => {
+    if (total <= 0) return;
+    total--;
+    document.getElementById('hrs').textContent  = String(Math.floor(total / 3600)).padStart(2,'0');
+    document.getElementById('mins').textContent = String(Math.floor((total % 3600) / 60)).padStart(2,'0');
+    document.getElementById('secs').textContent = String(total % 60).padStart(2,'0');
+  }, 1000);
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
 
 </body>
 </html>
