@@ -2,590 +2,386 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Shopnow – Shoes & Footwear</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AttendEase | Employee Attendance Dashboard</title>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --black:   #111111;
-      --charcoal:#2b2b2b;
-      --pink:    #e91e8c;
-      --pink-lt: #ff6ec7;
-      --cream:   #fff8f4;
-      --white:   #ffffff;
-      --gray:    #888888;
-      --border:  #ececec;
-      --shadow:  0 4px 24px rgba(0,0,0,0.08);
-      --radius:  14px;
-      --fs-hero: clamp(2.2rem, 7vw, 5rem);
-      --fs-h2:   clamp(1.4rem, 3.5vw, 2.4rem);
-      --fs-body: clamp(0.9rem, 1.5vw, 1rem);
+      --bg: #f4f6f9;
+      --surface: #ffffff;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --primary: #4f46e5;
+      --present: #16a34a;
+      --absent: #dc2626;
+      --late: #d97706;
+      --present-bg: #dcfce7;
+      --absent-bg: #fee2e2;
+      --late-bg: #fef3c7;
+      --radius: 12px;
+      --transition: 0.2s ease;
     }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Segoe UI', system-ui, sans-serif; font-size: var(--fs-body); color: var(--black); background: var(--white); line-height: 1.6; }
-    a { text-decoration: none; color: inherit; }
-    img { max-width: 100%; display: block; width: 100%; height: 100%; object-fit: cover; }
 
-    .skip { position: absolute; top: -999px; left: 1rem; background: var(--pink); color: #fff; padding: .5rem 1rem; border-radius: 4px; z-index: 9999; }
-    .skip:focus { top: 1rem; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* TOP BAR */
-    .topbar { background: var(--black); color: var(--white); text-align: center; font-size: .8rem; padding: .45rem 1rem; }
-    .topbar span { color: var(--pink-lt); font-weight: 700; }
-
-    /* HEADER */
-    header { position: sticky; top: 0; z-index: 100; background: var(--white); border-bottom: 1px solid var(--border); }
-    .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 1.25rem; height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-    .logo { font-size: 1.6rem; font-weight: 900; letter-spacing: -1px; color: var(--black); }
-    .logo span { color: var(--pink); }
-    .nav-links { display: none; list-style: none; gap: 2rem; align-items: center; }
-    .nav-links a { font-size: .92rem; font-weight: 600; color: var(--charcoal); transition: color .2s; }
-    .nav-links a:hover { color: var(--pink); }
-    .nav-actions { display: flex; align-items: center; gap: .75rem; }
-    .icon-btn { background: none; border: none; cursor: pointer; font-size: 1.3rem; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: background .2s; position: relative; }
-    .icon-btn:hover { background: var(--cream); }
-    .cart-badge { position: absolute; top: 4px; right: 4px; background: var(--pink); color: #fff; font-size: .6rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-    .menu-btn { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; gap: 5px; padding: 8px; min-width: 44px; min-height: 44px; justify-content: center; align-items: center; border-radius: 8px; }
-    .menu-btn span { display: block; width: 22px; height: 2px; background: var(--black); border-radius: 2px; }
-
-    /* MOBILE NAV */
-    #mobile-nav { position: fixed; inset: 0 0 0 auto; width: min(300px, 85vw); background: var(--white); padding: 5rem 2rem 2rem; border: none; margin: 0; box-shadow: -4px 0 30px rgba(0,0,0,.12); transform: translateX(100%); transition: transform .3s ease, overlay .3s, display .3s allow-discrete; }
-    #mobile-nav:popover-open { transform: translateX(0); }
-    #mobile-nav::backdrop { background: rgba(0,0,0,.4); }
-    @starting-style { #mobile-nav:popover-open { transform: translateX(100%); } }
-    #mobile-nav ul { list-style: none; display: flex; flex-direction: column; }
-    #mobile-nav li { border-bottom: 1px solid var(--border); }
-    #mobile-nav a { display: block; padding: 1rem 0; font-size: 1.05rem; font-weight: 600; color: var(--black); }
-    #mobile-nav a:hover { color: var(--pink); }
-
-    /* HERO */
-    .hero { background: var(--cream); overflow: hidden; }
-    .hero-inner { max-width: 1200px; margin: 0 auto; padding: 3rem 1.25rem; display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: center; }
-    .hero-tag { display: inline-block; background: var(--pink); color: #fff; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; padding: .35rem 1rem; border-radius: 999px; margin-bottom: 1rem; }
-    .hero h1 { font-size: var(--fs-hero); font-weight: 900; line-height: 1.05; letter-spacing: -2px; margin-bottom: 1rem; }
-    .hero h1 em { font-style: italic; color: var(--pink); }
-    .hero p { color: var(--gray); font-size: clamp(.95rem, 1.8vw, 1.1rem); margin-bottom: 1.75rem; max-width: 480px; }
-    .hero-btns { display: flex; flex-wrap: wrap; gap: .75rem; }
-    .btn { display: inline-flex; align-items: center; justify-content: center; padding: .8rem 1.75rem; border-radius: 999px; font-weight: 700; font-size: .95rem; cursor: pointer; transition: transform .15s, box-shadow .15s; min-height: 44px; border: none; }
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(233,30,140,.25); }
-    .btn-pink { background: var(--pink); color: #fff; }
-    .btn-outline { background: transparent; color: var(--black); border: 2px solid var(--black); }
-
-    /* HERO VISUAL - 3 shoe images */
-    .hero-visual { display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem; }
-    .hero-card { border-radius: var(--radius); overflow: hidden; position: relative; }
-    .hero-card:first-child { grid-row: span 2; min-height: 300px; }
-    .hc2, .hc3 { aspect-ratio: 4/3; }
-    .hero-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .hero-card-label { position: absolute; bottom: 1rem; left: 1rem; background: rgba(0,0,0,.5); color: #fff; padding: .3rem .8rem; border-radius: 999px; font-size: .78rem; font-weight: 700; backdrop-filter: blur(4px); }
-
-    /* CATEGORIES */
-    .categories { padding: 3rem 1.25rem; max-width: 1200px; margin: 0 auto; }
-    .sec-head { margin-bottom: 1.75rem; }
-    .sec-label { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--pink); }
-    .sec-title { font-size: var(--fs-h2); font-weight: 800; margin-top: .25rem; letter-spacing: -1px; }
-    .cat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-    .cat-card { border-radius: var(--radius); overflow: hidden; position: relative; min-height: 150px; cursor: pointer; transition: transform .2s; }
-    .cat-card:hover { transform: translateY(-4px); }
-    .cat-card img { width: 100%; height: 100%; object-fit: cover; }
-    .cat-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.72) 0%, rgba(0,0,0,.05) 60%); display: flex; flex-direction: column; justify-content: flex-end; padding: 1rem; }
-    .cat-overlay h3 { color: #fff; font-size: 1rem; font-weight: 800; }
-    .cat-overlay p { color: rgba(255,255,255,.8); font-size: .78rem; }
-
-    /* PRODUCTS */
-    .products-section { background: var(--cream); padding: 3rem 1.25rem; }
-    .products-inner { max-width: 1200px; margin: 0 auto; }
-    .filter-bar { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.75rem; }
-    .filter-btn { padding: .45rem 1.1rem; border-radius: 999px; border: 2px solid var(--border); background: var(--white); font-size: .82rem; font-weight: 600; cursor: pointer; min-height: 44px; transition: all .2s; }
-    .filter-btn.active, .filter-btn:hover { background: var(--pink); color: #fff; border-color: var(--pink); }
-    .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-    .product-card { background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: transform .2s; }
-    .product-card:hover { transform: translateY(-5px); }
-    .product-thumb { aspect-ratio: 1/1; position: relative; overflow: hidden; background: #f5f5f5; }
-    .product-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
-    .product-card:hover .product-thumb img { transform: scale(1.06); }
-    .badge { position: absolute; top: .75rem; left: .75rem; background: var(--pink); color: #fff; font-size: .68rem; font-weight: 700; padding: .2rem .6rem; border-radius: 999px; z-index: 1; }
-    .badge-new { background: var(--black); }
-    .wishlist-btn { position: absolute; top: .75rem; right: .75rem; background: var(--white); border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,.1); transition: transform .2s; z-index: 1; }
-    .wishlist-btn:hover { transform: scale(1.15); }
-    .product-info { padding: .9rem; }
-    .product-brand { font-size: .72rem; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; }
-    .product-name { font-size: .95rem; font-weight: 700; margin: .2rem 0 .4rem; }
-    .product-price { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
-    .price-now { font-size: 1rem; font-weight: 800; color: var(--pink); }
-    .price-old { font-size: .8rem; color: var(--gray); text-decoration: line-through; }
-    .price-off { font-size: .72rem; font-weight: 700; color: #2d6a4f; }
-    .add-cart { width: 100%; margin-top: .75rem; padding: .6rem; background: var(--black); color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: .85rem; cursor: pointer; min-height: 44px; transition: background .2s; }
-    .add-cart:hover { background: var(--pink); }
-
-    /* OFFER BANNER */
-    .offer-banner { background: var(--black); color: var(--white); padding: 3rem 1.25rem; text-align: center; }
-    .offer-banner h2 { font-size: var(--fs-h2); font-weight: 900; letter-spacing: -1px; margin-bottom: .5rem; }
-    .offer-banner h2 span { color: var(--pink); }
-    .offer-banner p { color: rgba(255,255,255,.65); margin-bottom: 1.5rem; }
-    .countdown { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; }
-    .count-box { background: rgba(255,255,255,.1); border-radius: 10px; padding: .75rem 1.25rem; min-width: 64px; }
-    .count-num { font-size: 1.8rem; font-weight: 900; display: block; }
-    .count-lbl { font-size: .7rem; color: rgba(255,255,255,.6); text-transform: uppercase; letter-spacing: 1px; }
-
-    /* FEATURES */
-    .features-strip { padding: 2.5rem 1.25rem; max-width: 1200px; margin: 0 auto; }
-    .features-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
-    .feat-item { display: flex; align-items: flex-start; gap: .85rem; padding: 1.25rem; border-radius: var(--radius); border: 1px solid var(--border); }
-    .feat-icon { font-size: 1.8rem; flex-shrink: 0; }
-    .feat-item h4 { font-size: .9rem; font-weight: 700; margin-bottom: .2rem; }
-    .feat-item p { font-size: .8rem; color: var(--gray); }
-
-    /* REVIEWS */
-    .reviews-section { background: var(--cream); padding: 3rem 1.25rem; }
-    .reviews-inner { max-width: 1200px; margin: 0 auto; }
-    .reviews-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 1.75rem; }
-    .review-card { background: var(--white); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); }
-    .stars { color: #f59e0b; font-size: 1rem; margin-bottom: .75rem; }
-    .review-card p { font-size: .9rem; color: var(--charcoal); line-height: 1.7; margin-bottom: 1rem; }
-    .reviewer { display: flex; align-items: center; gap: .75rem; }
-    .rev-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--pink); color: #fff; font-weight: 700; font-size: .85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .rev-name { font-weight: 700; font-size: .88rem; }
-    .rev-loc { font-size: .75rem; color: var(--gray); }
-
-    /* NEWSLETTER */
-    .newsletter { background: linear-gradient(135deg, var(--pink) 0%, #c2185b 100%); color: #fff; padding: 3rem 1.25rem; text-align: center; }
-    .newsletter h2 { font-size: var(--fs-h2); font-weight: 900; letter-spacing: -1px; margin-bottom: .5rem; }
-    .newsletter p { opacity: .88; margin-bottom: 1.5rem; }
-    .nl-form { display: flex; flex-direction: column; gap: .75rem; max-width: 480px; margin: 0 auto; }
-    .nl-form input { padding: .85rem 1.25rem; border-radius: 999px; border: none; font-size: .95rem; min-height: 44px; width: 100%; }
-    .btn-white { background: #fff; color: var(--pink); font-weight: 800; }
-
-    /* FOOTER */
-    footer { background: var(--black); color: rgba(255,255,255,.7); padding: 3rem 1.25rem 1.5rem; }
-    .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 2rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,.1); }
-    .footer-brand p { font-size: .88rem; margin-top: .75rem; line-height: 1.7; }
-    .footer-col h4 { color: #fff; font-size: .9rem; font-weight: 700; margin-bottom: 1rem; }
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
-    .footer-col a { font-size: .88rem; color: rgba(255,255,255,.6); transition: color .2s; }
-    .footer-col a:hover { color: var(--pink-lt); }
-    .social-row { display: flex; gap: .75rem; margin-top: 1rem; }
-    .social-btn { width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,.1); display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; transition: background .2s; }
-    .social-btn:hover { background: var(--pink); }
-    .footer-bottom { max-width: 1200px; margin: 1.5rem auto 0; font-size: .8rem; display: flex; flex-direction: column; gap: .5rem; align-items: center; text-align: center; }
-    .payment-icons { display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center; }
-    .pay-icon { background: rgba(255,255,255,.1); padding: .25rem .6rem; border-radius: 4px; font-size: .75rem; font-weight: 700; color: #fff; }
-
-    /* MEDIA QUERIES */
-    @media (min-width: 600px) {
-      .hero-inner    { grid-template-columns: 1fr 1fr; padding: 4rem 1.25rem; }
-      .cat-grid      { grid-template-columns: repeat(4, 1fr); }
-      .products-grid { grid-template-columns: repeat(3, 1fr); }
-      .reviews-grid  { grid-template-columns: repeat(2, 1fr); }
-      .nl-form       { flex-direction: row; }
-      .footer-grid   { grid-template-columns: repeat(2, 1fr); }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
     }
-    @media (min-width: 900px) {
-      .nav-links     { display: flex; }
-      .menu-btn      { display: none; }
-      .products-grid { grid-template-columns: repeat(4, 1fr); }
-      .features-row  { grid-template-columns: repeat(4, 1fr); }
-      .reviews-grid  { grid-template-columns: repeat(3, 1fr); }
-      .footer-grid   { grid-template-columns: 2fr 1fr 1fr 1fr; }
-      .footer-bottom { flex-direction: row; justify-content: space-between; }
+
+    .wrap { max-width: 980px; margin: 0 auto; padding: 1.75rem 1.25rem 4rem; }
+
+    /* Header */
+    header { margin-bottom: 1.5rem; }
+    header h1 { font-size: 1.5rem; font-weight: 700; }
+    header p { color: var(--muted); font-size: 0.88rem; margin-top: 0.2rem; }
+
+    /* Stats summary */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.9rem; margin-bottom: 1.5rem; }
+    .stat-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.25rem;
+      border: 1px solid var(--border);
     }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { transition: none !important; }
+    .stat-card .label { font-size: 0.78rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
+    .stat-card .value { font-size: 1.9rem; font-weight: 800; margin-top: 0.3rem; }
+    .stat-card.total .value { color: var(--ink); }
+    .stat-card.present .value { color: var(--present); }
+    .stat-card.absent .value { color: var(--absent); }
+    .stat-card.late .value { color: var(--late); }
+    .stat-card .sub { font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; }
+
+    /* Controls bar */
+    .controls {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 1rem 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+    .search-input {
+      flex: 1;
+      min-width: 180px;
+      padding: 0.55rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-family: inherit;
+    }
+    .search-input:focus { outline: none; border-color: var(--primary); }
+    .filter-chip-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .filter-chip {
+      padding: 0.45rem 0.95rem;
+      border-radius: 50px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all var(--transition);
+    }
+    .filter-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .filter-chip:hover:not(.active) { border-color: var(--primary); color: var(--primary); }
+    .date-display { font-size: 0.85rem; color: var(--muted); font-weight: 600; margin-left: auto; }
+
+    /* Employee table */
+    .table-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .emp-row {
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      transition: background var(--transition);
+    }
+    .emp-row:last-child { border-bottom: none; }
+    .emp-row:hover { background: #fafafa; }
+    .emp-row.head { background: #f9fafb; font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; padding: 0.7rem 1.25rem; }
+
+    .avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .emp-info .name { font-weight: 600; font-size: 0.92rem; }
+    .emp-info .dept { font-size: 0.78rem; color: var(--muted); }
+
+    .status-group { display: flex; gap: 0.4rem; align-items: center; }
+    .status-btn {
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all var(--transition);
+    }
+    .status-btn:hover { border-color: var(--primary); }
+    .status-btn.present.active { background: var(--present-bg); color: var(--present); border-color: var(--present); }
+    .status-btn.absent.active { background: var(--absent-bg); color: var(--absent); border-color: var(--absent); }
+    .status-btn.late.active { background: var(--late-bg); color: var(--late); border-color: var(--late); }
+
+    .status-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      margin-left: 0.5rem;
+      white-space: nowrap;
+    }
+    .status-badge.present { background: var(--present-bg); color: var(--present); }
+    .status-badge.absent { background: var(--absent-bg); color: var(--absent); }
+    .status-badge.late { background: var(--late-bg); color: var(--late); }
+
+    .empty-state { text-align: center; padding: 2.5rem 1rem; color: var(--muted); font-size: 0.9rem; }
+
+    footer { text-align: center; color: var(--muted); font-size: 0.78rem; margin-top: 2rem; }
+
+    @media (max-width: 600px) {
+      .emp-row { grid-template-columns: 36px 1fr; row-gap: 0.6rem; }
+      .status-group { grid-column: 1 / -1; justify-content: flex-start; }
     }
   </style>
 </head>
 <body>
 
-<a href="#main" class="skip">Skip to main content</a>
+<div class="wrap">
 
-<!-- TOP BAR -->
-<div class="topbar">👟 FREE Delivery on orders above ₹599 — Use code <span>SHOPNOW10</span> for 10% off!</div>
+  <header>
+    <h1>📋 AttendEase</h1>
+    <p>Employee attendance dashboard — mark and track daily attendance</p>
+  </header>
 
-<!-- HEADER -->
-<header>
-  <div class="nav-inner">
-    <a href="#" class="logo">Shop<span>now</span></a>
-    <nav aria-label="Main navigation">
-      <ul class="nav-links">
-        <li><a href="#categories">Categories</a></li>
-        <li><a href="#products">New Arrivals</a></li>
-        <li><a href="#offers">Offers</a></li>
-        <li><a href="#reviews">Reviews</a></li>
-      </ul>
-    </nav>
-    <div class="nav-actions">
-      <button class="icon-btn" aria-label="Search">🔍</button>
-      <button class="icon-btn" aria-label="Wishlist">🤍</button>
-      <button class="icon-btn" aria-label="Cart">🛒<span class="cart-badge">3</span></button>
-      <button class="menu-btn" popovertarget="mobile-nav" aria-label="Open menu">
-        <span></span><span></span><span></span>
-      </button>
+  <!-- Summary stats -->
+  <section class="stats-grid">
+    <div class="stat-card total">
+      <div class="label">Total employees</div>
+      <div class="value js-stat-total">0</div>
     </div>
-  </div>
-</header>
+    <div class="stat-card present">
+      <div class="label">Present</div>
+      <div class="value js-stat-present">0</div>
+      <div class="sub js-stat-present-pct">0% attendance</div>
+    </div>
+    <div class="stat-card absent">
+      <div class="label">Absent</div>
+      <div class="value js-stat-absent">0</div>
+    </div>
+    <div class="stat-card late">
+      <div class="label">Late</div>
+      <div class="value js-stat-late">0</div>
+    </div>
+  </section>
 
-<!-- MOBILE NAV -->
-<div id="mobile-nav" popover>
-  <ul>
-    <li><a href="#categories" popovertarget="mobile-nav" popovertargetaction="hide">Categories</a></li>
-    <li><a href="#products"   popovertarget="mobile-nav" popovertargetaction="hide">New Arrivals</a></li>
-    <li><a href="#offers"     popovertarget="mobile-nav" popovertargetaction="hide">Offers</a></li>
-    <li><a href="#reviews"    popovertarget="mobile-nav" popovertargetaction="hide">Reviews</a></li>
-    <li><a href="#newsletter" popovertarget="mobile-nav" popovertargetaction="hide">Newsletter</a></li>
-  </ul>
+  <!-- Controls -->
+  <section class="controls">
+    <input class="search-input js-search" type="text" placeholder="Search employee by name..." />
+    <div class="filter-chip-row js-filter-row"></div>
+    <span class="date-display js-today"></span>
+  </section>
+
+  <!-- Employee table -->
+  <section class="table-card">
+    <div class="emp-row head">
+      <span></span>
+      <span>Employee</span>
+      <span>Mark attendance</span>
+    </div>
+    <div class="js-emp-list"></div>
+  </section>
+
+  <footer>Built with Vanilla JS · DOM Manipulation · AttendEase Dashboard</footer>
+
 </div>
 
-<main id="main">
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-inner">
-      <div class="hero-text">
-        <span class="hero-tag">New Collection 2026</span>
-        <h1>Walk in<br><em>Style</em></h1>
-        <p>Step into the latest footwear trends — sneakers, boots, sandals & more. Fast delivery across India.</p>
-        <div class="hero-btns">
-          <a href="#products" class="btn btn-pink">Shop Now →</a>
-          <a href="#categories" class="btn btn-outline">Browse Categories</a>
-        </div>
-      </div>
-      <div class="hero-visual">
-        <div class="hero-card">
-          <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80" alt="Featured Sneakers" />
-          <span class="hero-card-label">Trending Sneakers</span>
-        </div>
-        <div class="hero-card hc2">
-          <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&q=80" alt="Running Shoes" />
-          <span class="hero-card-label">Running Shoes</span>
-        </div>
-        <div class="hero-card hc3">
-          <img src="https://images.unsplash.com/photo-1512374382149-233c42b6a83b?w=400&q=80" alt="Boots" />
-          <span class="hero-card-label">Boots & Casuals</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CATEGORIES -->
-  <section class="categories" id="categories">
-    <div class="sec-head">
-      <p class="sec-label">Shop by</p>
-      <h2 class="sec-title">Categories</h2>
-    </div>
-    <div class="cat-grid">
-      <div class="cat-card">
-        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80" alt="Sneakers" />
-        <div class="cat-overlay"><h3>Sneakers</h3><p>120+ styles</p></div>
-      </div>
-      <div class="cat-card">
-        <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&q=80" alt="Running" />
-        <div class="cat-overlay"><h3>Running</h3><p>80+ styles</p></div>
-      </div>
-      <div class="cat-card">
-        <img src="https://images.unsplash.com/photo-1512374382149-233c42b6a83b?w=400&q=80" alt="Boots" />
-        <div class="cat-overlay"><h3>Boots</h3><p>60+ styles</p></div>
-      </div>
-      <div class="cat-card">
-        <img src="https://images.unsplash.com/photo-1603487742131-4160ec999306?w=400&q=80" alt="Sandals" />
-        <div class="cat-overlay"><h3>Sandals</h3><p>90+ styles</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PRODUCTS -->
-  <section class="products-section" id="products">
-    <div class="products-inner">
-      <div class="sec-head">
-        <p class="sec-label">Trending</p>
-        <h2 class="sec-title">New Arrivals</h2>
-      </div>
-      <div class="filter-bar">
-        <button class="filter-btn active">All</button>
-        <button class="filter-btn">Sneakers</button>
-        <button class="filter-btn">Running</button>
-        <button class="filter-btn">Boots</button>
-        <button class="filter-btn">Sandals</button>
-        <button class="filter-btn">Sale</button>
-      </div>
-      <div class="products-grid">
-
-        <div class="product-card">
-          <div class="product-thumb">
-            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80" alt="Nike Air Max" />
-            <span class="badge">HOT</span>
-            <button class="wishlist-btn" aria-label="Wishlist">🤍</button>
-          </div>
-          <div class="product-info">
-            <p class="product-brand">Nike</p>
-            <p class="product-name">Air Max 270</p>
-            <div class="product-price">
-              <span class="price-now">₹7,999</span>
-              <span class="price-old">₹12,999</span>
-              <span class="price-off">38% off</span>
-            </div>
-            <button class="add-cart">Add to Cart</button>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-thumb">
-            <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&q=80" alt="Adidas Running" />
-            <span class="badge badge-new">NEW</span>
-            <button class="wishlist-btn" aria-label="Wishlist">🤍</button>
-          </div>
-          <div class="product-info">
-            <p class="product-brand">Adidas</p>
-            <p class="product-name">Ultraboost 22</p>
-            <div class="product-price">
-              <span class="price-now">₹8,499</span>
-              <span class="price-old">₹13,999</span>
-              <span class="price-off">39% off</span>
-            </div>
-            <button class="add-cart">Add to Cart</button>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-thumb">
-            <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=400&q=80" alt="Puma Sneakers" />
-            <span class="badge">SALE</span>
-            <button class="wishlist-btn" aria-label="Wishlist">🤍</button>
-          </div>
-          <div class="product-info">
-            <p class="product-brand">Puma</p>
-            <p class="product-name">RS-X Sneakers</p>
-            <div class="product-price">
-              <span class="price-now">₹4,999</span>
-              <span class="price-old">₹7,999</span>
-              <span class="price-off">37% off</span>
-            </div>
-            <button class="add-cart">Add to Cart</button>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-thumb">
-            <img src="https://images.unsplash.com/photo-1512374382149-233c42b6a83b?w=400&q=80" alt="Boots" />
-            <span class="badge badge-new">NEW</span>
-            <button class="wishlist-btn" aria-label="Wishlist">🤍</button>
-          </div>
-          <div class="product-info">
-            <p class="product-brand">Woodland</p>
-            <p class="product-name">Leather Boots</p>
-            <div class="product-price">
-              <span class="price-now">₹3,499</span>
-              <span class="price-old">₹5,999</span>
-              <span class="price-off">41% off</span>
-            </div>
-            <button class="add-cart">Add to Cart</button>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-thumb">
-            <img src="https://images.unsplash.com/photo-1603487742131-4160ec999306?w=400&q=80" alt="Sandals" />
-            <button class="wishlist-btn" aria-label="Wishlist">🤍</button>
-          </div>
-          <div class="product-info">
-            <p class="product-brand">Bata</p>
-            <p class="product-name">Comfort Sandals</p>
-            <div class="product-price">
-              <span class="price-now">₹1,299</span>
-              <span class="price-old">₹1,999</span>
-              <span class="price-off">35% off</span>
-            </div>
-            <button class="add-cart">Add to Cart</button>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-thumb">
-            <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&q=80" alt="Casual Shoes" />
-            <span class="badge">SALE</span>
-            <button class="wishlist-btn" aria-label="Wishlist">🤍</button>
-          </div>
-          <div class="product-info">
-            <p class="product-brand">Skechers</p>
-            <p class="product-name">Go Walk Casual</p>
-            <div class="product-price">
-              <span class="price-now">₹2,999</span>
-              <span class="price-old">₹4,999</span>
-              <span class="price-off">40% off</span>
-            </div>
-            <button class="add-cart">Add to Cart</button>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-thumb">
-            <img src="https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=400&q=80" alt="Canvas Shoes" />
-            <span class="badge badge-new">NEW</span>
-            <button class="wishlist-btn" aria-label="Wishlist">🤍</button>
-          </div>
-          <div class="product-info">
-            <p class="product-brand">Converse</p>
-            <p class="product-name">Chuck Taylor All Star</p>
-            <div class="product-price">
-              <span class="price-now">₹3,799</span>
-              <span class="price-old">₹5,499</span>
-              <span class="price-off">30% off</span>
-            </div>
-            <button class="add-cart">Add to Cart</button>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <div class="product-thumb">
-            <img src="https://images.unsplash.com/photo-1575537302964-96cd47c06b1b?w=400&q=80" alt="Formal Shoes" />
-            <button class="wishlist-btn" aria-label="Wishlist">🤍</button>
-          </div>
-          <div class="product-info">
-            <p class="product-brand">Red Tape</p>
-            <p class="product-name">Formal Derby Shoes</p>
-            <div class="product-price">
-              <span class="price-now">₹2,499</span>
-              <span class="price-old">₹3,999</span>
-              <span class="price-off">37% off</span>
-            </div>
-            <button class="add-cart">Add to Cart</button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- OFFER BANNER -->
-  <section class="offer-banner" id="offers">
-    <h2>Flash Sale Ends in <span>⚡</span></h2>
-    <p>Up to 70% off on selected footwear. Don't miss out!</p>
-    <div class="countdown">
-      <div class="count-box"><span class="count-num" id="hrs">08</span><span class="count-lbl">Hours</span></div>
-      <div class="count-box"><span class="count-num" id="mins">45</span><span class="count-lbl">Mins</span></div>
-      <div class="count-box"><span class="count-num" id="secs">30</span><span class="count-lbl">Secs</span></div>
-    </div>
-    <a href="#products" class="btn btn-pink">Grab the Deal →</a>
-  </section>
-
-  <!-- FEATURES -->
-  <section class="features-strip">
-    <div class="features-row">
-      <div class="feat-item"><span class="feat-icon">🚚</span><div><h4>Free Delivery</h4><p>On orders above ₹599 across India</p></div></div>
-      <div class="feat-item"><span class="feat-icon">🔄</span><div><h4>Easy Returns</h4><p>30-day hassle-free return policy</p></div></div>
-      <div class="feat-item"><span class="feat-icon">🔒</span><div><h4>Secure Payment</h4><p>UPI, cards & wallets accepted</p></div></div>
-      <div class="feat-item"><span class="feat-icon">📏</span><div><h4>Size Guide</h4><p>Find your perfect fit easily</p></div></div>
-    </div>
-  </section>
-
-  <!-- REVIEWS -->
-  <section class="reviews-section" id="reviews">
-    <div class="reviews-inner">
-      <div class="sec-head">
-        <p class="sec-label">Happy Customers</p>
-        <h2 class="sec-title">What They Say</h2>
-      </div>
-      <div class="reviews-grid">
-        <div class="review-card">
-          <div class="stars">★★★★★</div>
-          <p>"Nike Air Max is absolutely worth it! Super comfortable and looks great. Delivered in 2 days to Madurai!"</p>
-          <div class="reviewer"><div class="rev-avatar">RK</div><div><div class="rev-name">Rahul K.</div><div class="rev-loc">Madurai, TN</div></div></div>
-        </div>
-        <div class="review-card">
-          <div class="stars">★★★★★</div>
-          <p>"Adidas Ultraboost is perfect for my morning runs. Great grip, very lightweight. Highly recommend Shopnow!"</p>
-          <div class="reviewer"><div class="rev-avatar">PS</div><div><div class="rev-name">Priya S.</div><div class="rev-loc">Chennai, TN</div></div></div>
-        </div>
-        <div class="review-card">
-          <div class="stars">★★★★☆</div>
-          <p>"Woodland boots are sturdy and look premium. Used SHOPNOW10 code and got a great discount. Very happy!"</p>
-          <div class="reviewer"><div class="rev-avatar">AM</div><div><div class="rev-name">Arjun M.</div><div class="rev-loc">Coimbatore, TN</div></div></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- NEWSLETTER -->
-  <section class="newsletter" id="newsletter">
-    <h2>Get 10% Off Your First Order</h2>
-    <p>Subscribe for exclusive deals, new arrivals & shoe style tips.</p>
-    <div class="nl-form">
-      <input type="email" placeholder="Enter your email address" aria-label="Email address" />
-      <button class="btn btn-white">Subscribe</button>
-    </div>
-  </section>
-
-</main>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-grid">
-    <div class="footer-col footer-brand">
-      <span class="logo">Shop<span style="color:var(--pink)">now</span></span>
-      <p>Your one-stop footwear destination. Trending shoes delivered fast across India.</p>
-      <div class="social-row">
-        <div class="social-btn">📸</div>
-        <div class="social-btn">👍</div>
-        <div class="social-btn">▶️</div>
-        <div class="social-btn">💬</div>
-      </div>
-    </div>
-    <div class="footer-col">
-      <h4>Shop</h4>
-      <ul>
-        <li><a href="#">Sneakers</a></li>
-        <li><a href="#">Running Shoes</a></li>
-        <li><a href="#">Boots</a></li>
-        <li><a href="#">Sandals</a></li>
-        <li><a href="#">Formal Shoes</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Help</h4>
-      <ul>
-        <li><a href="#">Track Order</a></li>
-        <li><a href="#">Returns & Refunds</a></li>
-        <li><a href="#">Size Guide</a></li>
-        <li><a href="#">FAQ</a></li>
-        <li><a href="#">Contact Us</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>About</h4>
-      <ul>
-        <li><a href="#">About Shopnow</a></li>
-        <li><a href="#">Careers</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Terms of Service</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span>© 2026 Shopnow. All rights reserved.</span>
-    <div class="payment-icons">
-      <span class="pay-icon">UPI</span>
-      <span class="pay-icon">VISA</span>
-      <span class="pay-icon">MC</span>
-      <span class="pay-icon">PayTM</span>
-      <span class="pay-icon">COD</span>
-    </div>
-  </div>
-</footer>
-
 <script>
-  let total = 8 * 3600 + 45 * 60 + 30;
-  setInterval(() => {
-    if (total <= 0) return;
-    total--;
-    document.getElementById('hrs').textContent  = String(Math.floor(total / 3600)).padStart(2,'0');
-    document.getElementById('mins').textContent = String(Math.floor((total % 3600) / 60)).padStart(2,'0');
-    document.getElementById('secs').textContent = String(total % 60).padStart(2,'0');
-  }, 1000);
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+  /* ============================================================
+     STATE
+  ============================================================ */
+  let employees = [
+    { id: 1, name: "Abinaya",   dept: "Accountant", status: "present" },
+    { id: 2, name: "Priya ",     dept: "Engineering",       status: "present" },
+    { id: 3, name: "Shruthi",    dept: "Marketing",    status: "absent"  },
+    { id: 4, name: "Tajesh",     dept: "Engineering",  status: "late"    },
+    { id: 5, name: "Varshana",  dept: "Sales",        status: "present" },
+    { id: 6, name: "Varshini",   dept: "HR",           status: "absent"  },
+    { id: 7, name: "Vikram ",   dept: "Engineering",  status: "present" },
+    { id: 8, name: "Dharshini",   dept: "Design",       status: "late"    }
+  ];
+
+  let activeFilter = "all";
+  let searchTerm = "";
+
+  const filters = [
+    { key: "all",     label: "All" },
+    { key: "present", label: "Present" },
+    { key: "absent",  label: "Absent" },
+    { key: "late",    label: "Late" }
+  ];
+
+  /* ============================================================
+     DOM REFS
+  ============================================================ */
+  const empList      = document.querySelector('.js-emp-list');
+  const filterRow     = document.querySelector('.js-filter-row');
+  const searchInput   = document.querySelector('.js-search');
+  const todayDisplay  = document.querySelector('.js-today');
+
+  const statTotal      = document.querySelector('.js-stat-total');
+  const statPresent    = document.querySelector('.js-stat-present');
+  const statPresentPct = document.querySelector('.js-stat-present-pct');
+  const statAbsent     = document.querySelector('.js-stat-absent');
+  const statLate       = document.querySelector('.js-stat-late');
+
+  /* ============================================================
+     HELPERS
+  ============================================================ */
+  function getInitials(name) {
+    return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  }
+
+  function renderToday() {
+    const today = new Date();
+    todayDisplay.textContent = today.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+  }
+
+  /* ============================================================
+     RENDER STATS
+  ============================================================ */
+  function renderStats() {
+    const total = employees.length;
+    const present = employees.filter(e => e.status === 'present').length;
+    const absent = employees.filter(e => e.status === 'absent').length;
+    const late = employees.filter(e => e.status === 'late').length;
+    const pct = total === 0 ? 0 : Math.round((present / total) * 100);
+
+    statTotal.textContent = total;
+    statPresent.textContent = present;
+    statPresentPct.textContent = pct + '% attendance';
+    statAbsent.textContent = absent;
+    statLate.textContent = late;
+  }
+
+  /* ============================================================
+     RENDER FILTER CHIPS
+  ============================================================ */
+  function renderFilters() {
+    filterRow.innerHTML = '';
+    filters.forEach((f) => {
+      const chip = document.createElement('button');
+      chip.className = 'filter-chip js-filter-chip' + (f.key === activeFilter ? ' active' : '');
+      chip.textContent = f.label;
+      chip.dataset.key = f.key;
+      filterRow.appendChild(chip);
     });
+  }
+
+  filterRow.addEventListener('click', (e) => {
+    const chip = e.target.closest('.js-filter-chip');
+    if (!chip) return;
+    activeFilter = chip.dataset.key;
+    renderFilters();
+    renderEmployeeList();
   });
+
+  /* ============================================================
+     SEARCH
+  ============================================================ */
+  searchInput.addEventListener('input', () => {
+    searchTerm = searchInput.value.trim().toLowerCase();
+    renderEmployeeList();
+  });
+
+  /* ============================================================
+     RENDER EMPLOYEE LIST
+     IPO: filter/search state -> compute visible list -> build DOM rows
+  ============================================================ */
+  function renderEmployeeList() {
+    empList.innerHTML = '';
+
+    let visible = employees;
+
+    if (activeFilter !== 'all') {
+      visible = visible.filter(e => e.status === activeFilter);
+    }
+    if (searchTerm) {
+      visible = visible.filter(e => e.name.toLowerCase().includes(searchTerm));
+    }
+
+    if (visible.length === 0) {
+      empList.innerHTML = '<div class="empty-state">No employees match your search or filter.</div>';
+      return;
+    }
+
+    visible.forEach((emp) => {
+      const row = document.createElement('div');
+      row.className = 'emp-row';
+      row.dataset.id = emp.id;
+
+      row.innerHTML = `
+        <div class="avatar">${getInitials(emp.name)}</div>
+        <div class="emp-info">
+          <div class="name">${emp.name} <span class="status-badge ${emp.status}">${emp.status}</span></div>
+          <div class="dept">${emp.dept}</div>
+        </div>
+        <div class="status-group">
+          <button class="status-btn present js-status-btn ${emp.status === 'present' ? 'active' : ''}" data-status="present">Present</button>
+          <button class="status-btn late js-status-btn ${emp.status === 'late' ? 'active' : ''}" data-status="late">Late</button>
+          <button class="status-btn absent js-status-btn ${emp.status === 'absent' ? 'active' : ''}" data-status="absent">Absent</button>
+        </div>
+      `;
+      empList.appendChild(row);
+    });
+  }
+
+  /* ============================================================
+     STATUS UPDATE — event delegation on the list container
+     IPO: click status btn -> mutate employee state -> re-render
+  ============================================================ */
+  empList.addEventListener('click', (e) => {
+    const btn = e.target.closest('.js-status-btn');
+    if (!btn) return;
+
+    const row = btn.closest('.emp-row');
+    const id = Number(row.dataset.id);
+    const newStatus = btn.dataset.status;
+
+    employees = employees.map(emp =>
+      emp.id === id ? { ...emp, status: newStatus } : emp
+    );
+
+    renderStats();
+    renderEmployeeList();
+  });
+
+  /* ============================================================
+     INIT
+  ============================================================ */
+  renderToday();
+  renderFilters();
+  renderStats();
+  renderEmployeeList();
 </script>
 
 </body>
